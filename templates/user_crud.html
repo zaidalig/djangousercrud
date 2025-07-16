@@ -2,67 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>User CRUD</title>
+  <title>User Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
-<div class="container mt-5">
-  <h2 class="mb-4">User Management</h2>
+<div class="container py-5">
+  <h2 class="mb-4 text-center text-primary fw-bold">User Management Panel</h2>
 
   <!-- Add User Form -->
-  <form id="addUserForm" class="row g-3 mb-4">
-    <div class="col-md-4">
-      <input type="text" class="form-control" placeholder="Username" name="username" required />
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <form id="addUserForm" class="row g-3 align-items-center">
+        <div class="col-md-3">
+          <input type="text" class="form-control" placeholder="Username" name="username" required />
+        </div>
+        <div class="col-md-3">
+          <input type="email" class="form-control" placeholder="Email" name="email" />
+        </div>
+        <div class="col-md-3">
+          <input type="password" class="form-control" placeholder="Password" name="password" required />
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-success w-100">
+            <i class="bi bi-plus-circle"></i> Add User
+          </button>
+        </div>
+      </form>
     </div>
-    <div class="col-md-4">
-      <input type="email" class="form-control" placeholder="Email" name="email" />
-    </div>
-    <div class="col-md-3">
-      <input type="password" class="form-control" placeholder="Password" name="password" required />
-    </div>
-    <div class="col-md-1">
-      <button type="submit" class="btn btn-success w-100">Add</button>
-    </div>
-  </form>
+  </div>
 
   <!-- Search -->
-  <div class="mb-3">
+  <div class="input-group mb-4">
     <input id="searchInput" class="form-control" placeholder="Search by username or email…" />
+    <span class="input-group-text"><i class="bi bi-search"></i></span>
   </div>
 
   <!-- User Table -->
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>ID</th><th>Username</th><th>Email</th><th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="userTableBody"></tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle text-center shadow-sm">
+      <thead class="table-primary">
+        <tr>
+          <th>ID</th><th>Username</th><th>Email</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="userTableBody"></tbody>
+    </table>
+  </div>
 
   <!-- Pagination -->
   <nav>
-    <ul class="pagination" id="pagination"></ul>
+    <ul class="pagination justify-content-center" id="pagination"></ul>
   </nav>
 </div>
 
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <form class="modal-content" id="editUserForm">
-      <div class="modal-header">
+      <div class="modal-header bg-primary text-white">
         <h5 class="modal-title">Edit User</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
         <input type="hidden" name="id" />
-        <input type="text" class="form-control mb-2" name="username" placeholder="Username" required />
-        <input type="email" class="form-control mb-2" name="email" placeholder="Email" />
-        <input type="password" class="form-control" name="password" placeholder="New Password (optional)" />
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control" name="username" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" name="email" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">New Password (optional)</label>
+          <input type="password" class="form-control" name="password" />
+        </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" type="submit">Save</button>
-        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+        <button class="btn btn-primary" type="submit">Save Changes</button>
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
       </div>
     </form>
   </div>
@@ -87,7 +106,7 @@
               <td>${user.username}</td>
               <td>${user.email || "-"}</td>
               <td>
-                <button class="btn btn-sm btn-warning" onclick="openEditModal(${user.id})">Edit</button>
+                <button class="btn btn-sm btn-warning me-1" onclick="openEditModal(${user.id})">Edit</button>
                 <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">Delete</button>
               </td>
             </tr>`;
@@ -149,7 +168,7 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     }).then(() => {
-      new bootstrap.Modal(document.getElementById("editModal")).hide();
+      bootstrap.Modal.getInstance(document.getElementById("editModal")).hide();
       loadUsers(currentPage, searchQuery);
     });
   });
@@ -169,6 +188,8 @@
   loadUsers();
 </script>
 
+<!-- Bootstrap JS & Icons -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 </body>
 </html>
